@@ -13,38 +13,49 @@ namespace Lab00.Controllers
     [ApiController]
     public class PeliController : ControllerBase
     {
-        List<Pelicula> pel = new List<Pelicula>();
-        Pelicula peli = new Pelicula();
+
 
 
         // GET: api/Peli
         [HttpGet]
-        public IEnumerable<string> Get()
+        // para recibir dato
+        // [Route("{id?}")]
+        public IEnumerable<Pelicula> Get()
         {
-            string[] res = new string[10];
-            if (pel.Count() >= 10)
+        
+            if(Datacs.Instance.lista_peliculas.Count >10)
             {
-                int x = pel.Count()-1;
-                for (int y=0; y<10; y++) {
-                    res[y] =pel[x].nombre;
-                    x--;
+                int con = Datacs.Instance.lista_peliculas.Count;
+                List<Pelicula> lis = new List<Pelicula>();
+                for(int x =0; x < 10; x++)
+                {
+                    lis.Add(Datacs.Instance.lista_peliculas[con - x]);
+
                 }
+                return lis;
+
+
+
+            }
+            else
+            {
+                return Datacs.Instance.lista_peliculas;
             }
 
-
-            return res;
+           
         }
 
         
 
         // POST: api/Peli
         [HttpPost]
-        public void Post([FromBody] string nombre, string director, int año)
+        public void Post([FromBody] string nombre, string  director,int año)
         {
+            Pelicula peli = new Pelicula();
             peli.nombre = nombre;
             peli.director = director;
             peli.año = año;
-            pel.Add(peli);
+            Datacs.Instance.lista_peliculas.Add(peli);
         }
 
     }
